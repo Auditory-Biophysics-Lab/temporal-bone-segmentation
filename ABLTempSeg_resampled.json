@@ -1,0 +1,120 @@
+{
+    "json_version": "1.2",
+    "id": "temporal_bone_segmentation",
+    "type": "docker",
+
+    "name": "ABL Temporal Bone Segmentation (+Resampled)",
+    "organ": "Ear",
+    "task": "Segmentation",
+    "status": "In Development",
+    "modality": "CT",
+    "version": "1.3",
+    "description": "Automatically segment the temporal bone using a deep-learning model. Please ensure that the input image has been properly aligned. This version also returns the resampled image.",
+    "maintainers": ["Soodeh Nikan (ABL at UWO)", "Ben Connors (ABL at UWO)"],
+    "citation": "",
+    "website": "https://abl.uwo.ca",
+
+    "docker": {
+        "image_name": "uwoabl/temporalseg",
+        "image_tag": "latest",
+        "data_path": "/tmp"
+    },
+
+    "inputs": {
+        "input_vol": {
+            "name": "Input Volume",
+            "description": "Volume to pass to the segmenter.",
+            "flag": "-i",
+            "extension": ".nii",
+            "type": "volume",
+            "labelmap": false,
+            "pre": []
+        }
+    },
+
+    "params": {
+        "gpus": {
+            "name": "GPU Count",
+            "description": "Number of GPUs to use in inference.",
+            "flag": "--gpus=",
+            "type": "int",
+            "default": 1,
+            "min": 1,
+            "max": 16
+        },
+        "cuda": {
+            "name": "CUDA Devices",
+            "description": "Comma-separated list of CUDA devices to use (leave empty for all)",
+            "flag": "--cuda=",
+            "type": "string",
+            "default": ""
+        },
+        "threads": {
+            "name": "Thread Count",
+            "description": "Number of pre-processing threads to use (may only affect training)",
+            "flag": "--threads=",
+            "type": "int",
+            "default": 4,
+            "min": 1,
+            "max": 256
+        },
+        "disable_growth": {
+            "name": "Disable TensorFlow GPU Memory Growth",
+            "description": "Can lead to worse performance, but may help on low VRAM systems (<8GB)",
+            "flag": "--no-allow-growth",
+            "type": "bool",
+            "default": false
+        },
+        "cpu_resampling": {
+            "name": "Use CPU Resampling",
+            "description": "Use CPU resampling instead of CUDA; quality should be the same, but it's a lot slower",
+            "flag": "--cpu-resampling",
+            "type": "bool",
+            "default": false
+        }
+    },
+
+    "outputs": {
+        "output_seg": {
+            "name": "Output Segmentation",
+            "description": "Segmentation to put output into.",
+            "flag": "-o",
+            "extension": ".nii.gz",
+            "type": "segmentation",
+            "master": "input_vol",
+            "labelmap": true,
+            "post": [
+                {
+                    "name": "Island Removal",
+                    "description": "Remove all islands",
+                    "status": "suggested",
+                    "locked": true,
+                    "operation": "seged",
+                    "action": "Islands",
+                    "targets": [],
+                    "params": {
+                        "Operation": "KEEP_LARGEST_ISLAND",
+                        "MinimumSize": "1"
+                    }
+                },
+                {
+                    "name": "Show in 3D",
+                    "description": "Show the result in 3D",
+                    "status": "suggested",
+                    "locked": false,
+                    "operation": "render_3d",
+                    "params": {}
+                }
+            ]
+        },
+        "input_vol_resampled": {
+            "name": "Resampled Input Volume",
+            "description": "Resampled volume from the model.",
+            "flag": "-r",
+            "extension": ".nii.gz",
+            "type": "volume",
+            "labelmap": false,
+            "post": []
+        }
+    }
+}

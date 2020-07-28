@@ -1,0 +1,72 @@
+Input params at 2020-04-17 11:08:40.
+[CUSTOM]
+-- num_classes: 10
+-- output_prob: False
+-- label_normalisation: False
+-- softmax: True
+-- min_sampling_ratio: 0
+-- compulsory_labels: (0, 1)
+-- rand_samples: 0
+-- min_numb_labels: 1
+-- proba_connect: True
+-- evaluation_units: foreground
+-- image: ('ct',)
+-- label: ()
+-- weight: ()
+-- inferred: ()
+-- sampler: ()
+-- name: net_segment
+[CONFIG_FILE]
+-- path: /run/media/soodeh/E4E22A12E229EA0E/Users/Soodeh/Niftynet_Files_Soodeh/extensions/Temporal_Bone_segmentation/config_inference_test_crop.ini
+[CT]
+-- csv_file: /home/soodeh/Desktop/inference_test/ct.csv
+-- filename_contains: ('_154um_aligned',)
+-- filename_not_contains: ()
+-- filename_removefromid: 
+-- interp_order: 1
+-- loader: None
+-- pixdim: ()
+-- axcodes: ('A', 'R', 'S')
+-- spatial_window_size: (144, 144, 144)
+[SYSTEM]
+-- cuda_devices: ""
+-- num_threads: 2
+-- num_gpus: 2
+-- model_dir: /run/media/soodeh/E4E22A12E229EA0E/Users/Soodeh/Niftynet_Files_Soodeh/models/Temporal_Bone_segmentation
+-- dataset_split_file: ./dataset_split.csv
+-- event_handler: ('model_saver', 'model_restorer', 'sampler_threading', 'apply_gradients', 'output_interpreter', 'console_logger', 'tensorboard_logger')
+-- iteration_generator: iteration_generator
+-- queue_length: 60
+-- action: inference
+[NETWORK]
+-- name: dense_vnet
+-- activation_function: relu
+-- batch_size: 10
+-- smaller_final_batch_mode: pad
+-- decay: 0.0
+-- reg_type: L2
+-- volume_padding_size: (0, 0, 0)
+-- volume_padding_mode: minimum
+-- window_sampling: uniform
+-- queue_length: 5
+-- multimod_foreground_type: and
+-- histogram_ref_file: /run/media/soodeh/E4E22A12E229EA0E/Users/Soodeh/Niftynet_Files_Soodeh/models/Temporal_Bone_segmentation/standardisation_models.txt
+-- norm_type: percentile
+-- cutoff: (0.001, 0.999)
+-- foreground_type: mean_plus
+-- normalisation: True
+-- whitening: True
+-- normalise_foreground_only: True
+-- weight_initializer: he_normal
+-- bias_initializer: zeros
+-- keep_prob: 1.0
+-- weight_initializer_args: {}
+-- bias_initializer_args: {}
+[INFERENCE]
+-- spatial_window_size: (144, 144, 144)
+-- inference_iter: 20200
+-- dataset_to_infer: 
+-- save_seg_dir: ./Predictions
+-- output_postfix: _niftynet_out
+-- output_interp_order: 0
+-- border: (36, 36, 36)

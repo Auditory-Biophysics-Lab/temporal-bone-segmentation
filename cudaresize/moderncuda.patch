@@ -1,0 +1,25 @@
+diff --git a/code/cubicPrefilter2D.cu b/code/cubicPrefilter2D.cu
+index abcb52a..a8c1857 100644
+--- a/code/cubicPrefilter2D.cu
++++ b/code/cubicPrefilter2D.cu
+@@ -45,7 +45,7 @@ following papers:
+ #define _2D_CUBIC_BSPLINE_PREFILTER_H_
+ 
+ #include <stdio.h>
+-#include <cutil.h>
++#include <helper_cuda.h>
+ #include "internal/cubicPrefilter_kernel.cu"
+ 
+ // ***************************************************************************
+diff --git a/examples/cuda5_fix/cutil.h b/examples/cuda5_fix/cutil.h
+index 82575ab..f5341a2 100644
+--- a/examples/cuda5_fix/cutil.h
++++ b/examples/cuda5_fix/cutil.h
+@@ -9,7 +9,6 @@
+ 
+ #include <assert.h>
+ #include <vector>
+-#include <cuda_gl_interop.h>
+ #include <helper_timer.h>
+ 
+ static inline bool CUT_DEVICE_INIT(int argc, char** argv)
