@@ -84,18 +84,26 @@ def resize(im, new_width, new_height, new_depth):
 
     return output_im
 
-def island_removal(im):
+def island_removal(im, keep=None):
+    """Run island removal.
+
+    :params keep: A dictionary mapping label value to the number of largest islands to keep. If 
+                  a label is missing, the largest island is kept.
+    """
     im = sitk.Cast(im, sitk.sitkUInt8)
 
-    print("Unique")
+    #print("Unique")
     ## Figure out the unique labels. This way, we can also be sure that there will be at least one 
     ## connected component with that specific label
-    unique = np.unique(sitk.GetArrayViewFromImage(im))
-    #unique = [1,2,3,4,5,6,7,8,9]
+    #unique = np.unique(sitk.GetArrayViewFromImage(im))
+    unique = [1,2,3,4,5,6,7,8,9]
 
     ## Edge case in case there's no background
     if unique[0] == 0:
         unique = unique[1:]
+
+    if keep is None:
+        keep = {}
         
     output = None
     ## Split the image into the labels
@@ -127,7 +135,8 @@ def island_removal(im):
         thresh_filt = sitk.ThresholdImageFilter()
         #thresh_filt.InPlaceOn()
         thresh_filt.SetLower(1)
-        thresh_filt.SetUpper(1)
+        ## Use the user-specified number if given, otherwise keep just the largest
+        thresh_filt.SetUpper(keep.get(value, 1))
         res = thresh_filt.Execute(res)
 
         print("3rd Thres")

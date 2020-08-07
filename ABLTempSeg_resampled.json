@@ -15,7 +15,7 @@
     "website": "https://abl.uwo.ca",
 
     "docker": {
-        "image_name": "uwoabl/temporalseg",
+        "image_name": "uwoabl/temporal-bone-segmentation",
         "image_tag": "latest",
         "data_path": "/tmp"
     },
@@ -71,6 +71,13 @@
             "flag": "--cpu-resampling",
             "type": "bool",
             "default": false
+        },
+        "no_island_removal": {
+            "name": "Disable Island Removal",
+            "description": "Disable the island removal done by the model (does not affect the Slicer island removal)",
+            "flag": "--no-island-removal",
+            "type": "bool",
+            "default": false
         }
     },
 
@@ -82,7 +89,28 @@
             "extension": ".nii.gz",
             "type": "segmentation",
             "master": "input_vol",
-            "labelmap": true,
+            "colours": {
+                "1": [0.3764, 0.4470, 0.5176],
+                "2": [0.9568, 0.9176, 0.6235],
+                "3": [0.5019, 0.6431, 0.6352],
+                "4": [0.9647, 0.8901, 0.7607],
+                "5": [0.9647, 0.8901, 0.7607],
+                "6": [0.9647, 0.8901, 0.7607],
+                "7": [0.6941, 0.0666, 0.0549],
+                "8": [0.8627, 0.6980, 0.6705],
+                "9": [0.9411, 0.9411, 0.9137, 0.3]
+            },
+            "names": {
+                "1": "Sigmoid Sinus",
+                "2": "Facial Nerve",
+                "3": "Bony Inner Ear",
+                "4": "Malleus",
+                "5": "Incus",
+                "6": "Stapes",
+                "7": "Carotid Artery",
+                "8": "Internal Auditory Canal and Dura",
+                "9": "External Auditory Canal"
+            },
             "post": [
                 {
                     "name": "Island Removal",

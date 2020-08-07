@@ -25,6 +25,7 @@ parser.add_argument("--cpu-resampling", action="store_true", help="Disable CUDA 
 parser.add_argument("--cuda", default="", help="Comma-separated IDs of CUDA devices to use (defaults to all)")
 parser.add_argument("-t", "--threads", type=int, default=4, help="Number of threads to use")
 parser.add_argument("--no-allow-growth", action="store_true", help="Disable TensorFlow GPU memory growth (may cause out-of-memory errors on systems with low VRAM)")
+parser.add_argument("--no-island-removal", action="store_true", help="Disable island removal")
 
 args = parser.parse_args()
 
@@ -112,9 +113,12 @@ inferred = dict((i.strip("\r\n\t ").split(',') for i in open(os.path.join(PREFIX
 outext = inferred["run"][::-1].split('.', 1)[0][::-1] if '.' in inferred["run"] else "nii.gz"
 print("Loading output segmentation...")
 outp = sitk.ReadImage(inferred["run"])
-print("Running island removal...")
-outp = support.island_removal(outp)
-print("Storing output file...")
+if not args.no_island_removal:
+    print("Running island removal...")
+    ## FIXME: The facial nerve is currently not segmented very well, so we have to keep more than 
+    ##        just the largest island. This should be revisited
+    outp = support.island_removal(outp, keep={2: 3})
+print("Storing output label...")
 sitk.WriteImage(outp, args.output_label)
 
 ## Set the right permissions on the output image. We set them to the most permissive, just in case 
