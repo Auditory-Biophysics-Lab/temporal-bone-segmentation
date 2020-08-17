@@ -8,7 +8,7 @@
     "task": "Segmentation",
     "status": "In Development",
     "modality": "CT",
-    "version": "1.3",
+    "version": "1.4",
     "description": "Automatically segment the temporal bone using a deep-learning model. Please ensure that the input image has been properly aligned.",
     "maintainers": ["Soodeh Nikan (ABL at UWO)", "Ben Connors (ABL at UWO)"],
     "citation": "",
@@ -26,7 +26,7 @@
             "description": "Volume to pass to the segmenter.",
             "status": "required",
             "flag": "-i",
-            "extension": ".nii",
+            "extension": ".nii.gz",
             "type": "volume",
             "labelmap": false,
             "pre": []
